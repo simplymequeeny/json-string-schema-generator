@@ -65,11 +65,11 @@ public class GenerateSchema {
                     }
                   }
                 }
-              }
+              } 
             }
              */
 
-        JsonSchemaGenerator.outputAsFile(json, "output-schema.json");
+        JsonSchemaGenerator.outputAsFile("Schedule", "this is a test", json, "output-schema.json");
         // the above statement will generate the file on the directory 
         // where code was executed
     }
