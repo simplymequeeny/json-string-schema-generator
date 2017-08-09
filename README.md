@@ -1,4 +1,4 @@
-#json-string-schema-generator
+# json-string-schema-generator
 Generates JSON Schema based from JSON data using JAVA
 
 #### Motivation
