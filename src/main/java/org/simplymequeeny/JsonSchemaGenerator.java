@@ -3,11 +3,13 @@ package org.simplymequeeny;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.sun.codemodel.JCodeModel;
 import org.apache.commons.io.FileUtils;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.jsonschema2pojo.SchemaMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,22 @@ public final class JsonSchemaGenerator {
                 new File(filename),
                 cleanup(outputAsString(title, description, json)),
                 "utf8");
+    }
+
+    public static void outputAsPOJO(String title, String description,
+                                    String json, String packageName,
+                                    String outputDirectory) throws IOException {
+        String schema = JsonSchemaGenerator.outputAsString(title, title, json);
+        LOGGER.info("Generating POJO(s) ...");
+
+        File fDirectory = new File(outputDirectory);
+        if (!fDirectory.exists()) FileUtils.forceMkdir(fDirectory);
+
+        JCodeModel codeModel = new JCodeModel();
+        SchemaMapper mapper = new SchemaMapper();
+        mapper.generate(codeModel, title, packageName, schema);
+        codeModel.build(fDirectory);
+        LOGGER.info("DONE.");
     }
 
     private static String outputAsString(String title, String description,

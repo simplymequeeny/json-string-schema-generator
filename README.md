@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/simplymequeeny/json-string-schema-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/simplymequeeny/json-string-schema-generator)
 
 # json-string-schema-generator
-Generates JSON Schema based from JSON data using JAVA
+Generates JSON Schema or POJO based from JSON data using JAVA
 
 #### Motivation
 I have been googling a lot to find a library in JAVA that would generate me a JSON Schema based on the JSON data I have.  But most of the libraries I found need to have a JAVA class in order to generate a JSON schema.  So I made a simple JSON Schema Generator based on JSON data.  If there is a library that already exists please let me know (via posting an Issue here)  and I will be happy to use it in the current project I am working on.  Thanks!
@@ -69,9 +69,11 @@ public class GenerateSchema {
             }
              */
 
+        // To generate JSON schema into a file
         JsonSchemaGenerator.outputAsFile("Schedule", "this is a test", json, "output-schema.json");
-        // the above statement will generate the file on the directory 
-        // where code was executed
+        
+        // To generate POJO(s)
+        JsonSchemaGenerator.outputAsPOJO("Schedule", "this is a test", json, "com.example", "generated-sources");
     }
 }
 ```
@@ -82,6 +84,7 @@ public class GenerateSchema {
 1. [Java 8](https://www.oracle.com/java/index.html)
 1. [Jackson Databind](https://github.com/FasterXML/jackson-databind)
 1. [JSON Schema Validator](https://github.com/everit-org/json-schema)
+1. [jsonschema2pojo](http://www.jsonschema2pojo.org/)
 
 #### License
 This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details

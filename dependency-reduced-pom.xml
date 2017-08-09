@@ -3,10 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.simplymequeeny</groupId>
   <artifactId>json-string-schema-generator</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <scm>
     <connection>scm:git:git://github.com/simplymequeeny/json-string-schema-generator.git</connection>
     <developerConnection>scm:git:git@github.com:simplymequeeny/json-string-schema-generator.git</developerConnection>
+    <tag>json-string-schema-generator-1.0.2</tag>
     <url>https://github.com/simplymequeeny/json-string-schema-generator</url>
   </scm>
   <build>
