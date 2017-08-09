@@ -94,5 +94,5 @@
         <url>https://github.com/simplymequeeny/json-string-schema-generator</url>
         <connection>scm:git:git://github.com/simplymequeeny/json-string-schema-generator.git</connection>
         <developerConnection>scm:git:git@github.com:simplymequeeny/json-string-schema-generator.git</developerConnection>
-    </scm>
+  </scm>
 </project>
