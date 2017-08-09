@@ -76,11 +76,12 @@ public class GenerateSchema {
 }
 ```
 #### Author
-* Quennie Teves - initial work 
+* [Quennie Teves](https://github.com/simplymequeeny) - initial work
 
 #### Built With
-1. Java 8
-1. Jackson Databind 
+1. [Java 8](https://www.oracle.com/java/index.html)
+1. [Jackson Databind](https://github.com/FasterXML/jackson-databind)
+1. [JSON Schema Validator](https://github.com/everit-org/json-schema)
 
 #### License
 This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details
