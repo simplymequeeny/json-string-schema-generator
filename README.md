@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/simplymequeeny/json-string-schema-generator.svg?branch=master)](https://travis-ci.org/simplymequeeny/json-string-schema-generator)
+[![codecov](https://codecov.io/gh/simplymequeeny/json-string-schema-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/simplymequeeny/json-string-schema-generator)
+
 # json-string-schema-generator
 Generates JSON Schema based from JSON data using JAVA
 
