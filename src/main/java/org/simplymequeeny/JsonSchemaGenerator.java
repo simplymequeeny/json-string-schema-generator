@@ -18,18 +18,29 @@ public final class JsonSchemaGenerator {
     private static ObjectMapper objectMapper = new ObjectMapper();
     private static Map<String, JsonNodeType> map = new HashMap<>();
 
-    public static String outputAsString(String json) throws IOException {
-        return outputAsString(json, null);
+    public static String outputAsString(String title, String description,
+                                        String json) throws IOException {
+        return outputAsString(title, description, json, null);
     }
 
-    public static void outputAsFile(String json, String filename) throws IOException {
-        FileUtils.writeStringToFile(new File(filename), outputAsString(json), "utf8");
+    public static void outputAsFile(String title, String description,
+                                    String json, String filename) throws IOException {
+        FileUtils.writeStringToFile(
+                new File(filename),
+                outputAsString(title, description, json),
+                "utf8");
     }
 
-    private static String outputAsString(String json, JsonNodeType type) throws IOException {
+    private static String outputAsString(String title, String description,
+                                         String json, JsonNodeType type) throws IOException {
         JsonNode jsonNode = objectMapper.readTree(json);
         StringBuilder output = new StringBuilder();
         output.append("{");
+
+        if (type == null) output.append(
+                "\"title\": \"" +
+                        title + "\", \"description\": \"" +
+                        description + "\", \"type\": \"object\", \"properties\": {");
 
         for (Iterator<String> iterator = jsonNode.fieldNames(); iterator.hasNext();) {
             String fieldName = iterator.next();
@@ -37,11 +48,10 @@ public final class JsonSchemaGenerator {
 
             JsonNodeType nodeType = jsonNode.get(fieldName).getNodeType();
 
-            if (map.get(fieldName) == nodeType) continue;
-            else map.put(fieldName, nodeType);
-
             output.append(convertNodeToStringSchemaNode(jsonNode, nodeType, fieldName));
         }
+
+        if (type == null) output.append("}");
 
         output.append("}");
 
@@ -60,7 +70,7 @@ public final class JsonSchemaGenerator {
                 node = jsonNode.get(key).get(0);
                 LOGGER.info(key + " is an array with value of " + node.toString());
                 result.append("array\", \"items\": { \"properties\":");
-                result.append(outputAsString(node.toString(), JsonNodeType.ARRAY));
+                result.append(outputAsString(null, null, node.toString(), JsonNodeType.ARRAY));
                 result.append("}},");
                 break;
             case BOOLEAN:
@@ -72,7 +82,7 @@ public final class JsonSchemaGenerator {
             case OBJECT:
                 node = jsonNode.get(key);
                 result.append("object\", \"properties\": ");
-                result.append(outputAsString(node.toString()));
+                result.append(outputAsString(null, null, node.toString(), JsonNodeType.OBJECT));
                 result.append("},");
                 break;
             case STRING:

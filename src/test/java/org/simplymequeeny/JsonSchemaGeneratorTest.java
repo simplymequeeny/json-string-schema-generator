@@ -14,7 +14,7 @@ public class JsonSchemaGeneratorTest {
     @Test
     public void shouldGenerateSchemaUsingSimpleObject() throws Exception {
         String json = "{\"start\":{\"hour\":17,\"minute\":5}}";
-        String result = JsonSchemaGenerator.outputAsString(json);
+        String result = JsonSchemaGenerator.outputAsString("Schedule", "Test", json);
         Assert.assertTrue(isValid(json, result));
     }
 
@@ -24,7 +24,7 @@ public class JsonSchemaGeneratorTest {
                 "\"start\":{\"hour\":8,\"minute\":30},\"end\":{\"hour\":17,\"minute\":0}}," +
                 "{\"intensity\":10,\"start\":{\"hour\":17,\"minute\":5},\"end\":{\"hour\":23,\"minute\":55}}]," +
                 "\"id\":\"dbea21eb-57b5-44c9-a953-f61816fd5876\"}]}";
-        String result = JsonSchemaGenerator.outputAsString(json);
+        String result = JsonSchemaGenerator.outputAsString("Schedule", "Test",json);
         Assert.assertTrue(isValid(json, result));
     }
 
@@ -36,7 +36,7 @@ public class JsonSchemaGeneratorTest {
                 "\"end\":{\"hour\":23,\"minute\":55}}],\"id\":\"dbea21eb-57b5-44c9-a953-f61816fd5876\"}]," +
                 "\"dayOfWeek\":\"0,6\",\"createdBy\":\"Admin\",\"name\":\"test weekend preset\"," +
                 "\"client\":\"TestClient\",\"id\":\"83d6640a-6d80-487c-b92c-e4239e1ec6d5\"}";
-        String result = JsonSchemaGenerator.outputAsString(json);
+        String result = JsonSchemaGenerator.outputAsString("Schedule", "Test",json);
         Assert.assertTrue(isValid(json, result));
     }
 
@@ -50,7 +50,7 @@ public class JsonSchemaGeneratorTest {
                 "\"client\":\"TestClient\",\"id\":\"83d6640a-6d80-487c-b92c-e4239e1ec6d5\"," +
                 "\"state\":true, \"dateToday\": \"null\"}";
         String filename = "output-schema.json";
-        JsonSchemaGenerator.outputAsFile(json, filename);
+        JsonSchemaGenerator.outputAsFile("Schedule", "Test",json, filename);
         Assert.assertTrue(FileUtils.getFile(filename).exists());
     }
 

@@ -19,37 +19,49 @@ public class GenerateSchema {
             String result = JsonSchemaGenerator.outputAsString(json);
             /* sample output
             {
-              "sectors": {
-                "type": "array",
-                "items": {
-                  "properties": {
-                    "times": {
-                      "type": "array",
-                      "items": {
-                        "properties": {
-                          "intensity": {
-                            "type": "number"
-                          },
-                          "start": {
-                            "type": "object",
-                            "properties": {
-                              "hour": {
-                                "type": "number"
-                              },
-                              "minute": {
-                                "type": "number"
+              "title": "Schedule",
+              "description": "Test",
+              "type": "object",
+              "properties": {
+                "sectors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "times": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "intensity": {
+                              "type": "number"
+                            },
+                            "start": {
+                              "type": "object",
+                              "properties": {
+                                "hour": {
+                                  "type": "number"
+                                },
+                                "minute": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "end": {
+                              "type": "object",
+                              "properties": {
+                                "hour": {
+                                  "type": "number"
+                                },
+                                "minute": {
+                                  "type": "number"
+                                }
                               }
                             }
-                          },
-                          "end": {
-                            "type": "object",
-                            "properties": {}
                           }
                         }
+                      },
+                      "id": {
+                        "type": "string"
                       }
-                    },
-                    "id": {
-                      "type": "string"
                     }
                   }
                 }
