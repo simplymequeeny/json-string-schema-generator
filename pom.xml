@@ -4,7 +4,7 @@
 
     <groupId>org.simplymequeeny</groupId>
     <artifactId>json-string-schema-generator</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -115,6 +115,6 @@
         <url>https://github.com/simplymequeeny/json-string-schema-generator</url>
         <connection>scm:git:git://github.com/simplymequeeny/json-string-schema-generator.git</connection>
         <developerConnection>scm:git:git@github.com:simplymequeeny/json-string-schema-generator.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>json-string-schema-generator-1.2.0</tag>
   </scm>
 </project>
