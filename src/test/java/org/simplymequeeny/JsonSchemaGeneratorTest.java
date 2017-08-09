@@ -10,14 +10,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class JsonSchemaGeneratorTest {
+
     @Test
-    public void shouldGenerateAValidSchema() throws Exception {
-        String json = "{\"createdAt\":\"2017-07-19T16:31:26.843Z\"," +
-                "\"sectors\":[{\"times\":[{\"intensity\":30,\"start\":{\"hour\":8,\"minute\":30}," +
-                "\"end\":{\"hour\":17,\"minute\":0}},{\"intensity\":10,\"start\":{\"hour\":17,\"minute\":5}," +
-                "\"end\":{\"hour\":23,\"minute\":55}}],\"id\":\"dbea21eb-57b5-44c9-a953-f61816fd5876\"}]," +
-                "\"dayOfWeek\":\"0,6\",\"createdBy\":\"Admin\",\"name\":\"test weekend preset\"," +
-                "\"client\":\"TestClient\",\"id\":\"83d6640a-6d80-487c-b92c-e4239e1ec6d5\"}";
+    public void shouldGenerateSchemaUsingSimpleObject() throws Exception {
+        String json = "{\"start\":{\"hour\":17,\"minute\":5}}";
         String result = JsonSchemaGenerator.outputAsString(json);
         Assert.assertTrue(isValid(json, result));
     }
@@ -33,8 +29,13 @@ public class JsonSchemaGeneratorTest {
     }
 
     @Test
-    public void shouldGenerateSchemaUsingSingleObject() throws Exception {
-        String json = "{\"start\":{\"hour\":17,\"minute\":5}}";
+    public void shouldGenerateAValidSchema() throws Exception {
+        String json = "{\"createdAt\":\"2017-07-19T16:31:26.843Z\"," +
+                "\"sectors\":[{\"times\":[{\"intensity\":30,\"start\":{\"hour\":8,\"minute\":30}," +
+                "\"end\":{\"hour\":17,\"minute\":0}},{\"intensity\":10,\"start\":{\"hour\":17,\"minute\":5}," +
+                "\"end\":{\"hour\":23,\"minute\":55}}],\"id\":\"dbea21eb-57b5-44c9-a953-f61816fd5876\"}]," +
+                "\"dayOfWeek\":\"0,6\",\"createdBy\":\"Admin\",\"name\":\"test weekend preset\"," +
+                "\"client\":\"TestClient\",\"id\":\"83d6640a-6d80-487c-b92c-e4239e1ec6d5\"}";
         String result = JsonSchemaGenerator.outputAsString(json);
         Assert.assertTrue(isValid(json, result));
     }

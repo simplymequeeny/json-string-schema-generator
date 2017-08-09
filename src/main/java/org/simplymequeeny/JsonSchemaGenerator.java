@@ -7,13 +7,16 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Logger;
 
-public class JsonSchemaGenerator {
+public final class JsonSchemaGenerator {
 
     private static final Logger LOGGER = Logger.getLogger(JsonSchemaGenerator.class.getName());
     private static ObjectMapper objectMapper = new ObjectMapper();
+    private static Map<String, JsonNodeType> map = new HashMap<>();
 
     public static String outputAsString(String json) throws IOException {
         return outputAsString(json, null);
@@ -26,68 +29,56 @@ public class JsonSchemaGenerator {
     private static String outputAsString(String json, JsonNodeType type) throws IOException {
         JsonNode jsonNode = objectMapper.readTree(json);
         StringBuilder output = new StringBuilder();
-
-        if (type == null) {
-            output.append("{\"type\": \"object\",");
-        }
-        else if (type == JsonNodeType.ARRAY) {
-            output.append("{ \"type\": \"array\",");
-            output.append("\"items\": {");
-        }
-        output.append("\"properties\": {");
+        output.append("{");
 
         for (Iterator<String> iterator = jsonNode.fieldNames(); iterator.hasNext();) {
             String fieldName = iterator.next();
             LOGGER.info("processing " + fieldName + "...");
 
-            if (jsonNode.get(fieldName).isArray()) {
-                JsonNode node = jsonNode.get(fieldName).get(0);
-                LOGGER.info(fieldName + " is an array with value of " + node.toString());
-                output.append("\"" + fieldName + "\":");
-                output.append(outputAsString(node.toString(), JsonNodeType.ARRAY));
-                output.append(",");
-            }
-            else if (jsonNode.get(fieldName).isObject()) {
-                JsonNode node = jsonNode.get(fieldName);
-                output.append("\"" + fieldName + "\":");
-                output.append(outputAsString(node.toString()));
-                output.append(",");
-            }
-            else {
-                output.append(convertNodeToStringSchemaNode(jsonNode, fieldName));
-            }
+            JsonNodeType nodeType = jsonNode.get(fieldName).getNodeType();
+
+            if (map.get(fieldName) == nodeType) continue;
+            else map.put(fieldName, nodeType);
+
+            output.append(convertNodeToStringSchemaNode(jsonNode, nodeType, fieldName));
         }
 
-        if (type == JsonNodeType.ARRAY) output.append("}");
-
-        output.append("}");
         output.append("}");
 
         LOGGER.info("generated schema = " + output.toString());
         return output.toString();
     }
 
-    private static String convertNodeToStringSchemaNode(JsonNode jsonNode, String key) {
+    private static String convertNodeToStringSchemaNode(
+            JsonNode jsonNode, JsonNodeType nodeType, String key) throws IOException {
         StringBuilder result = new StringBuilder("\"" + key + "\": { \"type\": \"");
 
-        switch (jsonNode.get(key).getNodeType()) {
+        LOGGER.info(key + " node type " + nodeType + " with value " + jsonNode.get(key));
+        JsonNode node = null;
+        switch (nodeType) {
             case ARRAY :
-                result.append("array");
+                node = jsonNode.get(key).get(0);
+                LOGGER.info(key + " is an array with value of " + node.toString());
+                result.append("array\", \"items\": { \"properties\":");
+                result.append(outputAsString(node.toString(), JsonNodeType.ARRAY));
+                result.append("}},");
                 break;
             case BOOLEAN:
-                result.append("boolean");
+                result.append("boolean\" },");
                 break;
             case NUMBER:
-                result.append("number");
+                result.append("number\" },");
                 break;
             case OBJECT:
-                result.append("object");
+                node = jsonNode.get(key);
+                result.append("object\", \"properties\": ");
+                result.append(outputAsString(node.toString()));
+                result.append("},");
                 break;
             case STRING:
-                result.append("string");
+                result.append("string\" },");
                 break;
         }
-        result.append("\" },");
 
         return result.toString();
     }
