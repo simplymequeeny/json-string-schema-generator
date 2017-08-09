@@ -7,6 +7,10 @@ Generates JSON Schema or POJO based from JSON data using JAVA
 #### Motivation
 I have been googling a lot to find a library in JAVA that would generate me a JSON Schema based on the JSON data I have.  But most of the libraries I found need to have a JAVA class in order to generate a JSON schema.  So I made a simple JSON Schema Generator based on JSON data.  If there is a library that already exists please let me know (via posting an Issue here)  and I will be happy to use it in the current project I am working on.  Thanks!
 
+### Features
+1. Generates JSON Schema (output as String or File)
+1. Generates POJOs
+
 #### Usage
 Just call the static method JsonSchemaGenerator.outputAsString or JsonSchemaGenerator.outputAsFile
 ```java
