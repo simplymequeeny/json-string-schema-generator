@@ -1,6 +1,5 @@
 package org.simplymequeeny;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
@@ -58,86 +57,43 @@ public final class JsonSchemaGenerator {
                                          String json, JsonNodeType type) throws IOException {
         JsonNode jsonNode = objectMapper.readTree(json);
         StringBuilder output = new StringBuilder();
+        output.append("{");
 
+        if (type == null) output.append(
+                "\"title\": \"" +
+                        title + "\", \"description\": \"" +
+                        description + "\", \"type\": \"object\", \"properties\": {");
 
-        if (type == null && jsonNode.getNodeType() != JsonNodeType.ARRAY) {
-            output.append(
-                    "{\"title\": \"" +
-                            title + "\", \"description\": \"" +
-                            description + "\", \"type\": \"object\", \"properties\": {");
+        for (Iterator<String> iterator = jsonNode.fieldNames(); iterator.hasNext();) {
+            String fieldName = iterator.next();
+            LOGGER.info("processing " + fieldName + "...");
+
+            JsonNodeType nodeType = jsonNode.get(fieldName).getNodeType();
+
+            output.append(convertNodeToStringSchemaNode(jsonNode, nodeType, fieldName));
         }
 
-        if (type == null && jsonNode.getNodeType() == JsonNodeType.ARRAY) {
-            output.append(
-                    "{\"title\": \"" +
-                            title + "\", \"description\": \"" +
-                            description + "\", \"type\": \"array\", \"items\": [");
-            boolean flag = false;
-            for (int i=0; i< jsonNode.size(); i++) {
-                flag = true;
-                JsonNode node = jsonNode.get(i);
-                output.append(outputAsString(null, null, node.toString(), JsonNodeType.ARRAY));
-            }
-            if (flag){
-                output.replace( output.lastIndexOf(","), output.lastIndexOf(",")+1,"");
-            }
-            output.append("]");
+        if (type == null) output.append("}");
 
-        }
+        output.append("}");
 
-        if (type == JsonNodeType.ARRAY){
-
-            LOGGER.info("processing items ...");
-
-
-            output.append(convertNodeToStringSchemaNode(jsonNode, jsonNode.getNodeType(), null));
-
-        }else {
-            if (type != null)
-                output.append("{");
-            for (Iterator<String> iterator = jsonNode.fieldNames(); iterator.hasNext(); ) {
-                String fieldName = iterator.next();
-                LOGGER.info("processing " + fieldName + "...");
-
-                JsonNodeType nodeType = jsonNode.get(fieldName).getNodeType();
-
-                output.append(convertNodeToStringSchemaNode(jsonNode, nodeType, fieldName));
-            }
-
-            if (type == null) output.append("}");
-
-            output.append("}");
-        }
         LOGGER.info("generated schema = " + output.toString());
         return output.toString();
     }
 
     private static String convertNodeToStringSchemaNode(
             JsonNode jsonNode, JsonNodeType nodeType, String key) throws IOException {
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder("\"" + key + "\": { \"type\": \"");
 
-        if (key != null) {
-            result.append("\"" + key + "\": { \"type\": \"");
-            LOGGER.info(key + " node type " + nodeType + " with value " + jsonNode.get(key));
-        }else{
-            result.append("{ \"type\": \"");
-        }
+        LOGGER.info(key + " node type " + nodeType + " with value " + jsonNode.get(key));
         JsonNode node = null;
         switch (nodeType) {
             case ARRAY :
-
-                result.append("array\", \"items\": [");
-                boolean flag = false;
-                for (int i=0; i< jsonNode.get(key).size(); i++) {
-                    flag = true;
-                    node = jsonNode.get(key).get(i);
-                    LOGGER.info(key + " is an array with value of " + node.toString());
-                    result.append(outputAsString(null, null, node.toString(), JsonNodeType.ARRAY));
-                }
-                if (flag){
-                    result.replace( result.lastIndexOf(","), result.lastIndexOf(",")+1,"");
-                }
-                result.append("]},");
+                node = jsonNode.get(key).get(0);
+                LOGGER.info(key + " is an array with value of " + node.toString());
+                result.append("array\", \"items\": { \"properties\":");
+                result.append(outputAsString(null, null, node.toString(), JsonNodeType.ARRAY));
+                result.append("}},");
                 break;
             case BOOLEAN:
                 result.append("boolean\" },");
