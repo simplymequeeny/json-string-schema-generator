@@ -110,6 +110,10 @@ public final class JsonSchemaGenerator {
             case STRING:
                 result.append("string\" },");
                 break;
+              default:
+                result.append("null\"},");
+                break;
+                //added code to handle null point
         }
 
         return result.toString();
